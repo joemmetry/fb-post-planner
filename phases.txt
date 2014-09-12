@@ -1,0 +1,36 @@
+DEscription: schedule posting of facebook messages to  later time. 
+URL: fb-post-planner17.appspot.com
+Github Project Name :fb-post-planner
+TEchnology : Google App engine, HTML5, CSS3 Javascript, Jquery, Handlebars , JS
+
+Minimum requirements to get passing grade:
+database of scheduled/planned posting
+CRUD uis for scheduled/planned post
+system to send scheduled post from the server(appengine to facebook)
+repo hosted in github to see projects progress
+deadline October 11, 2014
+Phase 1 (post facebook message from the client side)
+1. host new projectfb-post-planner-0.appspot.com
+2. simple ui to get facebook status to post 
+3. create new facebook app
+4. Facebook login to get facebook access_token from your page
+5. use facebook api (me/feed) to post entered status to facebook
+
+phase 2
+1. add post handler in your server to accept (message, fb_id,access token) from client side
+2.USE facebook api (me/feed) with distinct (message, fb_id, access_token)to post in facebook from the server side
+
+phase 3
+1.create post model(fb_id, access_token message datetime) in appengine
+2. CRUD uis for scheduled post
+3. convert short lived  tokens to long lived tokens
+
+phase 4
+1. setup crow
+2. check due post to send 
+3. use facebook api(me/feed) to post scheduled status to facebook
+
+developers.facebook.com
+developers.facebook.com/docs/
+
+graph.facebook.com/
