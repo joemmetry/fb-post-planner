@@ -30,9 +30,22 @@
 						<input type="hidden" name="fbAccessToken" value="" />
 						<input type="hidden" name="fbMsgExpire" value="" />
 						<textarea id="fbMsg" tabindex="1" name="fbMsg" placeholder="What are you thinking right now?"></textarea>
-						<div id="fbMsgOpts">	
+						<div id="fbMsgOpts">
+							<a href="#" id=""><i class="uiIcon-gi-user_add"></i></a>
+							<a href="#" id=""><i class="uiIcon-gi-pin"></i></a>
+							<a href="#" id=""><i class="uiIcon-gi-camera"></i></a>
+							<a href="#" id=""><i class="uiIcon-gi-heart"></i></a>
 							<div class="pull-right">
-									<div class="uiButtonAppend ">
+								
+									<div id="postAudience" class="uiDropdown  uiDropdown-button">
+									    	<button class="uiDropdown-selected uiButtonStandard"><i class="uiIcon-gi-lock"></i> <span>Just Me</span></a> <i class="uiIcon-hl-chevron-down"></i></button>
+										<ul class="uiDropdown-menu" role="menu" aria-labelledby="dropdownMenu" style="margin-right: 20px">
+											<li><a data-value="0" tabindex="-1" href="#"><i class="uiIcon-gi-globe"></i> Public</a></li>
+											<li><a data-value="1" tabindex="-1" href="#"><i class="uiIcon-gi-lock"></i> Just Me</a></li>
+										</ul>
+									</div>
+								
+								<div class="uiButtonAppend ">
 									 <span class="input-append date" id="dp3" data-date="" data-date-format="mm-dd-yyyy" placeholder="01-01-2001">
 								                        <input class="span2" tabindex="2" name="fbDate" id="fbDate" size="16" value="" readonly="" type="text" />
 								                     	<span class="add-on" ></span>

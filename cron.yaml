@@ -1,0 +1,4 @@
+cron:
+- description: post scheduled contents
+  url:  /bootposts
+  schedule: every 1 mins
