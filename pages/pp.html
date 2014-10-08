@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Social Post Planner</title>
+	<link rel="stylesheet" type="text/css" href="/static/css/graphui.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/postplanner.css">
+	<script type="text/javascript" src="/static/js/jquery.js"></script>
+	<script type="text/javascript" src="/static/js/handlebars.js"></script>
+</head>
+<body>
+	
+	<div id="pageContainer" class="">
+		<div id="pageHeader" class="uiHeaderDark">
+			<div class="containerMain">
+				<span><h5><a class="uiTransition" href="/">Social Post Planner</a></h5></span>
+				<strong style="float:right;" id="gridLogin"></strong>
+			</div>
+		</div>
+		<div id="pageBody" class="containerWrapper">
+			<div class="containerMain">
+				<div class="uiPageHeader">					
+					<h4>Privacy Policy</h4>
+					<div>REVISED LAST: September 15, 2014</div>
+				</div>
+				<div>
+					<div><strong>Data Use Policy</strong></div>
+					<p>
+					Using Social Post Planner, users conform to the policies on how Social Post Planner handles data for providing and improving great service to its users. If you have questions, suggestions, or complaints regarding our policy practices, contact us by mail. If you are a staying in or a resident of the Republic of the Philippines, our mailing address is in Polytechnic University of the Philippines, NDC Compound, Anonas St. cor. Pureza St., Sta Mesa, Manila, 1016. If you are outside the Republic of the Philippines, you can write us an <a href="mailto:social.post.planner@gmail.com">electronic mail</a>.</p>
+					<ol style="margin-left:20px;">
+						<li>
+							<div><strong>Information Acquisition and Usage</strong></div>
+							<div>
+								<p>
+								We are requiring you to give your personal name and email in order to user our services.
+								</p>
+								<ul class="contentList">
+									<li>
+										<h4>Login Information</h4>
+										<p>When you  login via social networking sites, Social Post Planner fetches your basic information like your email and full name.</p>
+									</li>
+									<li>
+										<h4>Access Tokens</h4>
+										<p>When scheduling posts, we grant access from social networking sites for them to give us access tokens which could be used lately when posting your content.</p>
+									</li>
+									<li>
+										<h4>Content Information</h4>
+										<p>To schedule posts, we get the content and save it to our datacenter and post it upon scheduled date. After posting, the content remains in our system and removed after reasonable amount of time.</p>
+									</li>
+									<li>
+										<h4>Post Permissions</h4>
+										<p>Social networking sites policies set permissions for users. We do not control permissions like the audience of content and we  do not show a user's posts to other users or to other websites.</p>
+									</li>
+									<li>
+										<h4>Post Duration</h4>
+										<p>Scheduled Posts are valid for 45 days from its date of schedule. For other contents that were scheduled 45 days from the current date, we will requiring the user to login before every 45 days in order to refresh his tokens gathered from social networking sites.</p>
+									</li>
+								</ul>
+							</div>
+						</li>
+						<li>
+							<div><strong>Web Technologies</strong></div>
+							<div>
+								<p>
+								Cookies, Session IDs, and other technologies are used to provide excellent services between the Social Post Planner and user's computer. Another thing is to provide and understand ranges of products and services.</p>
+								<ol style="margin-left:20px;">
+									<li>
+										<p><strong>Cookies</strong> are used to store information from us to a user's computer, to make Social Post Planner easier to use, to protect users and Social Post Planner, and to understand the use of our products and services.</p>
+									</li>
+									<li>
+										<p><strong>Session IDs</strong> are like cookies, however, it is more encrypted data composed of mixed information stored into user's browser. And then, it can only be decrypted by Social Post Planner's own encryption and decryption technologies.</p>
+									</li>
+									<li>
+										<p><strong>Other Technologies</strong> such as pixels, local database server, and local temporary storage are used by Social Post Planner to put information prior to posting, logging, and managing of information. </p>
+									</li>
+								</ol>
+								<p>
+								Most companies across globe use these similar technologies for themselves and their clients. Thus it still available today because of its usage importance delivered to users and developers.
+								</p>
+							</div>
+						</li>
+						<li>
+							<div><strong>Agreement</strong></div>
+							<div>
+								<p>
+								By using Social Post Planner, you are aware of these things and Social Post Planner will not grant any liablities for any misuse of information otherwise if the error not came from our system. If the error came from us, we will give necessary support to the victim and improve our services further. Furthermore,  we will do our best to avoid those problems and difficulties.
+								</p>
+							</div>
+						</li>
+					</ol>
+				</div>
+			</div>
+		</div>
+		<div id="pageFooter" class="uiHeaderLight">
+			<span>
+				<div class="containerMain">
+					Social Post Planner <span style="color:#0645ad;font-weight:bolder;font-size:14px;">&#9426;</span> 2014. Patents Pending.
+					<span class="pull-right"><a href="/terms">Terms of Use</a> | <a href="/privacy">Privacy</a> | <a href="/about">About</a></span>
+				</div>
+			</span>
+		</div>
+	</div>
+	<script type="text/javascript" src="/static/js/postplanner.js"></script>
+	{%raw%}
+	<script type="text/x-handlebars-template" id="tempLogin">
+		{{#if a}}
+		<span class="fb-names" style="font-weight:normal" >
+			<img src="{{a}}" style="height:25px;width:25px;margin-right:10px;"/><span><a href="{{b}}">{{c}}</a> | </span>
+		</span>
+		{{/if}}
+		<a href="#" class="fb-login">{{d}}</a>
+	</script>
+	{%endraw%}
+
+</body>
+</html>

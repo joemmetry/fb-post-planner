@@ -30,21 +30,27 @@
 						<input type="hidden" name="fbAccessToken" value="" />
 						<input type="hidden" name="fbMsgExpire" value="" />
 						<textarea id="fbMsg" tabindex="1" name="fbMsg" placeholder="What are you thinking right now?"></textarea>
-						<div id="fbMsgOpts">
+						<div id="fbMsgOpts">	
 							<div class="pull-right">
-								<div class="uiButtonAppend ">
+									<div class="uiButtonAppend ">
 									 <span class="input-append date" id="dp3" data-date="" data-date-format="mm-dd-yyyy" placeholder="01-01-2001">
-			                        <input class="span2" tabindex="2" name="fbDate" id="fbDate" size="16" value="" readonly="" type="text" />
-			                     	<span class="add-on" ></span>
-			                     </span>
-			                     <input class="span2" tabindex="3" maxlength="8" id="fbClock" name="fbClock" placeholder="12:34 AM" type="text" role="tooltip" data-placement="right" title="Right format hh:mm [AM/PM]">
-			                     <button id="postS" class="uiButtonDisabled" tabindex="4" disabled="disabled">Schedule Post</button><!--id="fbPost"-->   
-				               </div>
-			               </div>
+								                        <input class="span2" tabindex="2" name="fbDate" id="fbDate" size="16" value="" readonly="" type="text" />
+								                     	<span class="add-on" ></span>
+								                     </span>
+								                     <input class="span2" tabindex="3" maxlength="8" id="fbClock" name="fbClock" placeholder="12:34 AM" type="text" role="tooltip" data-placement="right" title="Right format hh:mm [AM/PM]">
+								                     <button id="postS" class="uiButtonDisabled" tabindex="4" disabled="disabled">Schedule Post</button><!--id="fbPost"-->
+								                     
+							               </div>
+						               </div>
 						</div>
 					</form>
 					<script type="text/javascript">
 						$(document).ready(function(){
+							if($('.statusValues').length == 0){
+								a = $('#nullList').html();
+								b = Handlebars.compile(a);
+								$('#scheduledPosts').append(b);
+							}
 							$('#save').submit(function(e){
 								$.ajax({
 									url: $(this).attr('action'),
@@ -88,6 +94,29 @@
 					});
 
 				</script>
+				<div id="scheduledPosts">
+					<h4>Scheduled Posts</h4>
+					<div id="savedPosts" class="uiTable striped">
+						<div class="statusTitles uiTable-row">
+							<div class="span2">Name</div>
+							<div class="span2">User ID</div>
+							<div class="span2">Schedule</div>
+							<div class="span4">Content</div>
+							<div class="span2">Expires In</div>
+						</div>
+						{%for list in fetched %}
+						{% if list.postStatus == "Pending"%}
+						<div class="statusValues uiTable-row">
+							<div class="span2">{{ list.userFullName }}</div>
+							<div class="span2">{{ list.userID }}</div>
+							<div class="span2">{{ list.postDatePrinted }}</div>
+							<div class="span4">{{ list.content }}</div>
+							<div class="span2">{{ list.postExpires }}</div>
+						</div>
+						{% endif %}
+						{%endfor%}
+					</div>
+				</div>
 			</div>
 		</div>
 		<div id="pageFooter" class="uiHeaderLight">
@@ -100,6 +129,7 @@
 		</div>
 	</div>
 	<script type="text/javascript" src="/static/js/graphui-modal.js"></script>
+	<script type="text/javascript" src="/static/js/graphui-dropdown.js"></script>
 	<script type="text/javascript" src="/static/js/graphui-tooltip.js"></script>
 	<script type="text/javascript" src="/static/js/postplanner.js"></script>
 	<script type="text/javascript">
@@ -140,6 +170,25 @@
 		</span>
 		{{/if}}
 		<a href="#" class="fb-login">{{d}}</a>
+	</script>
+	<script type="text/x-handlebars-template" id="addAfterSched">
+		<div class="statusValues uiTable-row">
+			<div class="span2">{{a}}</div>
+			<div class="span2">{{b}}</div>
+			<div class="span2">{{c}}</div>
+			<div class="span4">{{d}}</div>
+			<div class="span2">{{e}}</div>
+		</div>
+
+	</script>
+	<script type="text/x-handlebars-template" id="nullList">
+		<div class="uiTable" id="noQuery">
+			<div class="statusValues uiTable-row">
+				<div class="statusNoContent">
+					<center>No schedules had been added. Fill up the form above to add one.</center>
+				</div>
+			</div>
+		</div>
 	</script>
 	{%endraw%}
 

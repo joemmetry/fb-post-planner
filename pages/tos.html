@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Social Post Planner</title>
+	<link rel="stylesheet" type="text/css" href="/static/css/graphui.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/postplanner.css">
+	<script type="text/javascript" src="/static/js/jquery.js"></script>
+	<script type="text/javascript" src="/static/js/handlebars.js"></script>
+</head>
+<body>
+	
+	<div id="pageContainer" class="">
+		<div id="pageHeader" class="uiHeaderDark">
+			<div class="containerMain">
+				<span><h5><a class="uiTransition" href="/">Social Post Planner</a></h5></span>
+				<strong style="float:right;" id="gridLogin"></strong>
+			</div>
+		</div>
+		<div id="pageBody" class="containerWrapper">
+			<div class="containerMain">
+				<div class="uiPageHeader">
+					<h4>Terms of Use</h4>
+					<div>This agreement was only available in US English. Translating it to other languages may cause conflict. This application also complies to the Anti-Cybercrime Law of the Republic of the Philippines.</div>
+					<div>Revised last September 15, 2014.</div>
+				</div>
+				<div>
+					<div><strong>User Rights and Responsibilities</strong></div>
+					<p>
+					This User Rights and Responsibilities functions as a service that governs the relationship of Social Post Planner to users. By using or accessing the Social Post Planner, you agree to this statement this page is indicating.
+					</p>
+					<ol style="margin-left:20px;">
+						<li>
+							<div><strong>Privacy</strong></div>
+							<div>
+								<p>
+								Your privacy is very important to our team. Users who use this app could set the privacy of their post, and Social Post Planner respects those. We do not share users posts to other websites like social networks without their permission.
+								</p>
+							</div>
+						</li>
+						<li>
+							<div><strong>User Information Sharing</strong></div>
+							<div>
+								<p>
+								Social Post Planner fetches what are allowed by the users from their social networking sites. Thus, the Terms of Use of respective social networking sites apply in using the Social Post Planner application. Additionally:
+								</p>
+								<ol style="margin-left:20px;">
+									<li>
+										<p>Contents with intellectual rights can be used by our app providing that you give us permission to have royalty-free, transferable, and/or non-exclusive license on your posts. These only ends when you delete your post in our app unless the contents are already shared with others.</p>
+									</li>
+									<li>
+										<p>If the content was already posted Social Post Planner persists in backup copies and only removed for a reasonable amount of time. However, the content is not available to other users.</p>
+									</li>
+									<li>
+										<p>Using Social Post Planner, it will ask for permission via the social networking sites. By accepting specified permissions. You are allowing Social Planner to use your provided info with our application.</p>
+									</li>
+									<li>
+										<p>We are welcome to accept suggestions and feedbacks. That means, we may use them without any mandatory actions or obligations.</p>
+									</li>
+								</ol>
+							</div>
+						</li>
+						<li>
+							<div><strong>Safety</strong></div>
+							<div>
+								<p>
+								Using Social Post Planner does not guarantee safety. However, we need your help to make you and Social Post Planner safe with these commitments from you provided below:
+								</p>
+								<ol style="margin-left:20px;">
+									<li>
+										<p>You will not post unauthorized connections such as spam on Social Post Planner and other social networking sites.</p>
+									</li>
+									<li>
+										<p>You will not collect user information using automation without our permission.</p>
+									</li>
+									<li>
+										<p>You will not engage in unlawful multi-marketing.</p>
+									</li>
+									<li>
+										<p>You will not post malicious software such as spams, bloatwares, viruses, and etc.</p>
+									</li>
+									<li>
+										<p>You will not bully other users with the use of our application.</p>
+									</li>
+									<li>
+										<p>You will not encourage any violations of this User Rights and Responsibilities.</p>
+									</li>
+								</ol>
+							</div>
+						</li>
+						<li>
+							<div><strong>Other Developments Regarding Social Post Planner</strong></div>
+							<div>
+								<p>
+								We could change our User Rights and Responsibilities without consenting users. However, we will provide our best and notify users of Social Post Planner for changes to improve our services with users.</p>
+							</div>
+						</li>
+
+					</ol>
+				</div>
+			</div>
+		</div>
+		<div id="pageFooter" class="uiHeaderLight">
+			<span>
+				<div class="containerMain">
+					Social Post Planner <span style="color:#0645ad;font-weight:bolder;font-size:14px;">&#9426;</span> 2014. Patents Pending.
+					<span class="pull-right"><a href="/terms">Terms of Use</a> | <a href="/privacy">Privacy</a> | <a href="/about">About</a></span>
+				</div>
+			</span>
+		</div>
+	</div>
+	<script type="text/javascript" src="/static/js/postplanner.js"></script>
+	{%raw%}
+	<script type="text/x-handlebars-template" id="tempLogin">
+		{{#if a}}
+		<span class="fb-names" style="font-weight:normal" >
+			<img src="{{a}}" style="height:25px;width:25px;margin-right:10px;"/><span><a href="{{b}}">{{c}}</a> | </span>
+		</span>
+		{{/if}}
+		<a href="#" class="fb-login">{{d}}</a>
+	</script>
+	{%endraw%}
+
+</body>
+</html>

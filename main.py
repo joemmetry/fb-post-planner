@@ -78,6 +78,16 @@ class MainHandler(webapp2.RequestHandler):
         page = JINJA_ENV.get_template('pages/index.html')
         self.response.write(page.render(values))
 
+class TosHandler(webapp2.RequestHandler):
+    def get(self):
+    	page = JINJA_ENV.get_template('pages/tos.html')
+        self.response.write(page.render())
+
+class PrivacyHandler(webapp2.RequestHandler):
+    def get(self):
+    	page = JINJA_ENV.get_template('pages/pp.html')
+        self.response.write(page.render())
+
 class SaveHandler(webapp2.RequestHandler):
     def post(self):
         saveContent = SPContents()
@@ -126,5 +136,11 @@ class SPContents(ndb.Model):
     postAudience = ndb.StringProperty(default="1")
 
 app = webapp2.WSGIApplication([
-    ('/', MainHandler)
+    ('/', MainHandler),
+    ('/terms', TosHandler),
+    ('/terms/', TosHandler),
+    ('/privacy', PrivacyHandler),
+    ('/privacy/', PrivacyHandler),
+    ('/save', SaveHandler),
+    ('/bootposts',PostScheduledHandler)
 ], debug=True)
