@@ -4,7 +4,9 @@
 	<title>Social Post Planner</title>
 	<link rel="stylesheet" type="text/css" href="/static/css/graphui.css">
 	<link rel="stylesheet" type="text/css" href="/static/css/postplanner.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/datepicker.css">
 	<script type="text/javascript" src="/static/js/jquery.js"></script>
+	<script type="text/javascript" src="/static/js/datepicker.js"></script>
 	<script type="text/javascript" src="/static/js/handlebars.js"></script>
 </head>
 <body>
@@ -19,20 +21,117 @@
 		<div id="pageBody" class="containerWrapper">
 			<div class="containerMain">
 				<h4>Post Something</h4>
-				<div><textarea id="fbMsg" placeholder="What are you thinking right now?" style="width:100%;height:150px;"></textarea></div>
-				<div><button id="fbPost" class="pull-right">Post Message</button></div>
+				<div>
+
+					<form id="save" action="/save" method="post">
+						<input type="hidden" name="fbAudience" value="1" />
+						<input type="hidden" name="fbName" value="" />
+						<input type="hidden" name="fbID" value="" />
+						<input type="hidden" name="fbAccessToken" value="" />
+						<input type="hidden" name="fbMsgExpire" value="" />
+						<textarea id="fbMsg" tabindex="1" name="fbMsg" placeholder="What are you thinking right now?"></textarea>
+						<div id="fbMsgOpts">
+							<div class="pull-right">
+								<div class="uiButtonAppend ">
+									 <span class="input-append date" id="dp3" data-date="" data-date-format="mm-dd-yyyy" placeholder="01-01-2001">
+			                        <input class="span2" tabindex="2" name="fbDate" id="fbDate" size="16" value="" readonly="" type="text" />
+			                     	<span class="add-on" ></span>
+			                     </span>
+			                     <input class="span2" tabindex="3" maxlength="8" id="fbClock" name="fbClock" placeholder="12:34 AM" type="text" role="tooltip" data-placement="right" title="Right format hh:mm [AM/PM]">
+			                     <button id="postS" class="uiButtonDisabled" tabindex="4" disabled="disabled">Schedule Post</button><!--id="fbPost"-->   
+				               </div>
+			               </div>
+						</div>
+					</form>
+					<script type="text/javascript">
+						$(document).ready(function(){
+							$('#save').submit(function(e){
+								$.ajax({
+									url: $(this).attr('action'),
+									type: $(this).attr('method'),
+									data: $(this).serialize()
+								});
+								callMe();
+								e.preventDefault();
+							});	
+						});
+
+						var callMe =  function(){
+							var a = {
+								a: $('[name="fbName"]').val(),
+								b: $('[name="fbID"]').val(),
+								c: $('[name="fbDate"]').val() + " " + $('[name="fbClock"]').val(),
+								d: $('[name="fbMsg"]').val(),
+								e: $('[name="fbMsgExpire"]').val()
+							},
+								b = $('#addAfterSched').html(),
+								c = Handlebars.compile(b),
+								d = c(a);
+								if($('#noQuery').length>0){$('#noQuery').remove();}
+								$('#savedPosts').append(d);
+								//$('[name="fbMsg"], [name="fbClock"]').val('');
+						};
+				               </script>
+				</div>
+				<script type="text/javascript">
+					$('#fbMsg').on('input propertychange keyup change',function(){PPInputs.textAreaAdjust(this);});
+					
+					$('#fbMsg, #fbClock').on('input propertychange keyup change',function(){
+						if($('#fbMsg').val().length > 0 && ($('#fbClock').val().length > 0 &&
+							PPInputs.checkClock($('#fbClock')) === true)){							
+							$('#postS').removeAttr('disabled')
+								.removeClass('uiButtonDisabled');							
+							return;
+						}
+							$('#postS').attr('disabled','disabled')
+								.addClass('uiButtonDisabled');
+					});
+
+				</script>
 			</div>
 		</div>
 		<div id="pageFooter" class="uiHeaderLight">
 			<span>
 				<div class="containerMain">
-					<!--&copy; 2014. fb-post-planner-17. Patents Pending.-->
+					Social Post Planner <span style="color:#0645ad;font-weight:bolder;font-size:14px;">&#9426;</span> 2014. Patents Pending.
+					<span class="pull-right"><a href="/terms">Terms of Use</a> | <a href="/privacy">Privacy</a> | <a href="/about">About</a></span>
 				</div>
 			</span>
 		</div>
 	</div>
 	<script type="text/javascript" src="/static/js/graphui-modal.js"></script>
+	<script type="text/javascript" src="/static/js/graphui-tooltip.js"></script>
 	<script type="text/javascript" src="/static/js/postplanner.js"></script>
+	<script type="text/javascript">
+              		$(document).ready(function(){
+              			$('[name="fbClock"]').on('keyup', function(e){
+              				if(PPInputs.checkClock($(this))==false){
+              					$(this).tooltip('show');
+              				}
+              				else{$(this).tooltip('hide');}
+              			})
+              			$('#dp3').attr('data-date',PPInputs.setPostDate());
+              			$('#fbDate').val(PPInputs.setPostDate());
+              			$('[name="fbMsgExpire"]').val(PPInputs.setPostDate(45));
+			   	
+              			
+              			$('.datepicker').hide();
+              			$('#fbDate').click(function(){$('#dp3').datepicker('show');})
+			$('#dp3').datepicker({
+			  onRender: function(date) {
+              				 return date.valueOf() < now.valueOf() ? 'disabled' : '';
+			 	 }
+			}).on('changeDate',function(){
+			   	var a = $('#fbDate').val(),
+			   		b = a.split('-');
+			   	var expires = new Date(b[2],b[0]-1,b[1], 0, 0, 0, 0);
+			   	var value = PPInputs.setPostDate(expires,45);
+			  	$('[name="fbMsgExpire"]').val(value);
+			});
+
+              		});
+              		$('[role="tooltip"]').tooltip({'animation':false});
+	</script>
 	{%raw%}
 	<script type="text/x-handlebars-template" id="tempLogin">
 		{{#if a}}
