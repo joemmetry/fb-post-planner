@@ -69,11 +69,14 @@ def facebookTokenConvert(a,self):
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
-        fetchContents = SPContents.query().fetch()
-        getUser = self.request.cookies.get('socA')
-        getID = self.request.cookies.get('socC')
+        fetchContents = SPContents.query().order(SPContents.postDatePrinted).fetch()
+        getUser = self.request.cookies.get('socC')
+        getID = self.request.cookies.get('socA')
+        getDate = datetime.now() + timedelta(hours=8)
         values = {
-            'fetched': fetchContents
+            'fetched': fetchContents,
+            'userID' : getID,
+            'dateNow' : datetime.strftime(getDate, "%m-%d-%Y")
         }
         page = JINJA_ENV.get_template('pages/index.html')
         self.response.write(page.render(values))
@@ -108,6 +111,23 @@ class SaveHandler(webapp2.RequestHandler):
         saveContent.postExpires = self.request.get('fbMsgExpire')
         saveContent.put()
 
+class UpdateTokenHandler(webapp2.RequestHandler):
+    def get(self):
+        getCurrentToken= self.request.cookies.get('socB')
+        getCurrentName = self.request.cookies.get('socC')
+        getCurrentID = self.request.cookies.get('socA')
+        longToken = facebookTokenConvert(getCurrentToken, self)
+
+        #self.response.write(longToken)
+        a = SPContents()
+        b = SPContents.query(
+                ndb.AND(
+                    SPContents.userID==getCurrentID)
+            ).fetch()
+        for c in b:
+           c.accessToken = longToken['access_token']
+           c.put()
+
 class PostScheduledHandler(webapp2.RequestHandler):
     def get(self):
         a = SPContents()
@@ -122,15 +142,47 @@ class PostScheduledHandler(webapp2.RequestHandler):
             c.postStatus = "Completed"
             c.put()
 
+class EditHandler(webapp2.RequestHandler):
+    def get(self,postid):
+        getID = int(postid)
+        getUserID = self.request.cookies.get('socA')
+        getPosts = SPContents.query().fetch()
+        values = {
+            'postList' : getPosts,
+            'postID' : getID,
+            'user' :    getUserID
+        }
+        template = JINJA_ENV.get_template('pages/editPost.html')
+        self.response.write(template.render(values))
+
+    def post(self,postid):
+        getID = int(postid)
+        getUserID = self.request.cookies.get('socA')
+        getPosts = SPContents.get_by_id(getID)
+        formatDate = self.request.get('fbDate') + " " + self.request.get('fbClock')
+
+        getPosts.content = self.request.get('fbMsg')
+        getPosts.postDate = datetime.strptime(formatDate, "%m-%d-%Y %I:%M %p")
+        getPosts.put()
+        time.sleep(3)
+        self.redirect('/')
+
+class DeleteHandler(webapp2.RequestHandler):
+    def get(self,postid):
+        getID = int(postid)
+        ndb.Key(SPContents, getID).delete()
+        time.sleep(2)
+        self.redirect('/')
+        
 #Field Fetchers
 class SPContents(ndb.Model):
     post_date = ndb.DateTimeProperty(auto_now_add=True)
-    userFullName = ndb.StringProperty(indexed=False)
-    userID = ndb.StringProperty(indexed=False)
+    userFullName = ndb.StringProperty(indexed=True)
+    userID = ndb.StringProperty(indexed=True)
     accessToken = ndb.StringProperty(indexed=False)
     content = ndb.StringProperty(indexed=False)
     postDate = ndb.DateTimeProperty()
-    postDatePrinted = ndb.StringProperty(indexed=False)
+    postDatePrinted = ndb.StringProperty(indexed=True)
     postExpires = ndb.StringProperty(indexed=False)
     postStatus = ndb.StringProperty(default="Pending")
     postAudience = ndb.StringProperty(default="1")
@@ -142,5 +194,8 @@ app = webapp2.WSGIApplication([
     ('/privacy', PrivacyHandler),
     ('/privacy/', PrivacyHandler),
     ('/save', SaveHandler),
-    ('/bootposts',PostScheduledHandler)
+    ('/bootposts',PostScheduledHandler),
+    ('/bootupdatetoken', UpdateTokenHandler),
+    ('/edit/(\d+)/', EditHandler),
+    ('/delete/(\d+)/', DeleteHandler)
 ], debug=True)

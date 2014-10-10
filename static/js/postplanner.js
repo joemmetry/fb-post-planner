@@ -116,6 +116,9 @@ PostPlanner.FB = {
 		if (Cookie.get('socA') != '' && Cookie.get('socA') == a.authResponse.userID &&
                                     typeof b == "boolean" && b==true ) {
 		    FB.logout();
+
+                                 /*remove post lists*/
+                                 $('#scheduledPosts').remove();
 		    this.isLoggedOut(true);
 		    return false;
 		}
@@ -131,9 +134,11 @@ PostPlanner.FB = {
                                                 $('.fb-names span a').html(Cookie.get('socC'));
                                                 $('.fb-names span a').attr('target', '_blank');
                                                 $('.fb-names span a').attr('href', Cookie.get('socE'));
+                                                /*refresh longlive token*/
+                                                $.get("/bootupdatetoken")
                                             }
 		}).isLoggedOut(false);
-		return this;
+                            return this;
     },
     isLoggedOut: function (a) {
         if (typeof a == 'boolean') {
@@ -226,6 +231,8 @@ var implementFunctions = function () {
                                 PostPlanner.FB.checkLogin(a);
                                 console.log(a.authResponse.accessToken);
                                 console.log(Cookie.get('socB'));
+                                /*to update the page*/
+                                 location.reload();
                             }
                         }, {
                             scope: ' email,' + ' publish_actions,' + ' user_birthday,' + ' xmpp_login,',

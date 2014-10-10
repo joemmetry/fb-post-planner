@@ -6,16 +6,16 @@
 
 
 
-.uiTable {display: table;width: 100%}
-.uiTable-row {display: table-row;}
-.uiTable-row > div {display: table-cell;border-right: 1px #a8a8a8 solid;border-bottom: 1px #a8a8a8 solid;padding:4px;}
-.uiTable-row > div:first-child {border-left: 1px #a8a8a8 solid;}
-.uiTable-row.statusTitles > div {border-top: 1px #a8a8a8 solid;}
-.uiTable.striped > .uiTable-row:nth-child(even) {background: #527ACC;color:#f3f1e9;}
-.uiTable.striped > .uiTable-row:nth-child(odd) {background-color: #f8f8f8;}
+.uiTable {width: 100%}
+.uiTable-row {display: block;width: 100%;border: 1px #c8c8c8 solid;padding:10px 20px;border-radius: .5em;margin-bottom: 10px;}
+.uiTable > [class^=statusDate] {font-size: 20px;}
+.uiTable-row > div:first-child {font-size: 16px;margin-bottom: 10px;}
+.uiTable-row > div:last-child {font-size: 11px;color: #777}
+/*.uiTable.striped > .uiTable-row:nth-child(even) {background: #527ACC;color:#f3f1e9;}*/
+.uiTable.striped > .uiTable-row{background-color: #f8f8f8;}
 .uiTable.striped > .uiTable-row:hover {background-color: #f3f1e9;color: #222}
 
-.statusNoContent {width:100%;background:#ff1f1f;color:#f3f1e9}
+.statusNoContent {width:100%;color:#f3f1e9;font-size: 16px;}
 
 .contentList {margin-left:20px;list-style-type:square;color: #527ACC;font-size: 18px;}
 .contentList li p, .contentList li h4 {color: #222;}

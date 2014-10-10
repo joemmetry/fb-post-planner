@@ -1,0 +1,102 @@
+<html>
+<body>
+<script type="text/javascript" src="/static/js/jquery.js"></script>
+<div id="pageContainer" style="border-top: 1px #AAA solid"> 
+	<div id="pageBody" > 
+		<div class="containerMain"> 
+		{% if user %}
+			{% for list in postList %}
+				{% if list.key.id() == postID %}
+				<div id="" class="span8" style="margin:0 auto">
+							<form method="post" action="/edit/{{postID}}/">
+								<textarea id="fbMsg" tabindex="1" name="fbMsg" placeholder="What are you thinking right now?"></textarea>
+								<div id="fbMsgOpts">
+									<a href="#" id=""><i class="uiIcon-gi-user_add"></i></a>
+									<a href="#" id=""><i class="uiIcon-gi-pin"></i></a>
+									<a href="#" id=""><i class="uiIcon-gi-camera"></i></a>
+									<a href="#" id=""><i class="uiIcon-gi-heart"></i></a>
+									<div class="pull-right">
+										<div class="uiButtonAppend ">
+											 <span class="input-append date" id="dp3" data-date="" data-date-format="mm-dd-yyyy" placeholder="01-01-2001">
+										                        <input class="span2" tabindex="2" name="fbDate" id="fbDate" size="16" value="" readonly="" type="text" />
+										                     	<span class="add-on" ></span>
+										                     </span>
+										                     <input class="span2" tabindex="3" maxlength="8" id="fbClock" name="fbClock" placeholder="12:34 AM" type="text" role="tooltip" data-placement="right" title="Right format hh:mm [AM/PM]">
+										                     <button id="postS" class="uiButtonDisabled" tabindex="4" disabled="disabled">Schedule Post</button><!--id="fbPost"-->
+										                     
+									               </div>
+								               </div>
+								</div>
+							</form>
+						</div>
+				{%endif%}
+			{% endfor %}
+		{% else %}
+			<div id="HomeBackground" style="background-color:rgb(217,94,27);background-image: url('/refs/wall2.jpg')"></div>
+			
+			<div class="gn-thesisMsg">
+				<div class="gn-thesisHdr">:(</div>
+				<div class="gn-thesisCon">
+					<p>Creating student entries is not allowed unless you're signed in. If you wish to browse the list without signing in, click <a href="/student/list">here</a>.
+					</p>
+				</div>
+				<br>
+				<div>
+					<p>If you like to login, click Anonymous on the top-right side of the page then click Login.</p>
+				</div>
+			</div>
+		{% endif %}
+		</div>
+		<div class="clearfix"></div> 
+	</div>
+</div> 
+<link rel="stylesheet" type="text/css" href="/static/css/graphui.css" />
+<link rel="stylesheet" type="text/css" href="/static/css/postplanner.css"/>
+<link rel="stylesheet" type="text/css" href="/static/css/datepicker.css"/>
+<script type="text/javascript" src="/static/js/handlebars.js"></script>
+<script type="text/javascript" src="/static/js/postplanner.js"></script>
+<script type="text/javascript" src="/static/js/graphui-tooltip.js"></script>
+<script type="text/javascript" src="/static/js/datepicker.js"></script>
+<script type="text/javascript">
+	$('#fbMsg').on('input propertychange keyup change',function(){PPInputs.textAreaAdjust(this);});
+					
+	$('#fbMsg, #fbClock').on('input propertychange keyup change',function(){
+		if($('#fbMsg').val().length > 0 && ($('#fbClock').val().length > 0 &&
+			PPInputs.checkClock($('#fbClock')) === true)){							
+			$('#postS').removeAttr('disabled')
+				.removeClass('uiButtonDisabled');							
+			return;
+		}
+			$('#postS').attr('disabled','disabled')
+				.addClass('uiButtonDisabled');
+	});
+	$(document).ready(function(){
+		$('[name="fbClock"]').on('keyup', function(e){
+			if(PPInputs.checkClock($(this))==false){
+				$(this).tooltip('show');
+			}
+			else{$(this).tooltip('hide');}
+		});
+		$('#dp3').attr('data-date',PPInputs.setPostDate());
+		$('#fbDate').val(PPInputs.setPostDate());
+		$('[name="fbMsgExpire"]').val(PPInputs.setPostDate(45));
+			   	
+              			
+		$('.datepicker').hide();
+		$('#fbDate').click(function(){$('#dp3').datepicker('show');})
+		$('#dp3').datepicker({
+			  onRender: function(date) {
+		      				 return date.valueOf() < now.valueOf() ? 'disabled' : '';
+			 	 }
+			}).on('changeDate',function(){
+			   	var a = $('#fbDate').val(),
+			   		b = a.split('-');
+			   	var expires = new Date(b[2],b[0]-1,b[1], 0, 0, 0, 0);
+			   	var value = PPInputs.setPostDate(expires,45);
+			  	$('[name="fbMsgExpire"]').val(value);
+			});
+      		});
+      		$('[role="tooltip"]').tooltip({'animation':false});
+</script>
+</body>
+</html>

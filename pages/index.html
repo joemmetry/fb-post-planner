@@ -7,6 +7,7 @@
 	<link rel="stylesheet" type="text/css" href="/static/css/datepicker.css">
 	<script type="text/javascript" src="/static/js/jquery.js"></script>
 	<script type="text/javascript" src="/static/js/datepicker.js"></script>
+	<script type="text/javascript" src="/static/js/moment.js"></script>
 	<script type="text/javascript" src="/static/js/handlebars.js"></script>
 </head>
 <body>
@@ -22,7 +23,6 @@
 			<div class="containerMain">
 				<h4>Post Something</h4>
 				<div>
-
 					<form id="save" action="/save" method="post">
 						<input type="hidden" name="fbAudience" value="1" />
 						<input type="hidden" name="fbName" value="" />
@@ -31,19 +31,23 @@
 						<input type="hidden" name="fbMsgExpire" value="" />
 						<textarea id="fbMsg" tabindex="1" name="fbMsg" placeholder="What are you thinking right now?"></textarea>
 						<div id="fbMsgOpts">
-							<a href="#" id=""><i class="uiIcon-gi-user_add"></i></a>
-							<a href="#" id=""><i class="uiIcon-gi-pin"></i></a>
-							<a href="#" id=""><i class="uiIcon-gi-camera"></i></a>
-							<a href="#" id=""><i class="uiIcon-gi-heart"></i></a>
+							<a href="#" id=""  role="tooltip" data-placement="right" title="This feature will be available soon"
+ role="tooltip" data-placement="right" title="This feature will be available soon"><i class="uiIcon-gi-user_add"></i></a>
+							<a href="#" id=""  role="tooltip" data-placement="right" title="This feature will be available soon"
+ role="tooltip" data-placement="right" title="This feature will be available soon"><i class="uiIcon-gi-pin"></i></a>
+							<a href="#" id=""  role="tooltip" data-placement="right" title="This feature will be available soon"
+ role="tooltip" data-placement="right" title="This feature will be available soon"><i class="uiIcon-gi-camera"></i></a>
+							<a href="#" id=""  role="tooltip" data-placement="right" title="This feature will be available soon"
+ role="tooltip" data-placement="right" title="This feature will be available soon"><i class="uiIcon-gi-heart"></i></a>
 							<div class="pull-right">
 								
-									<div id="postAudience" class="uiDropdown  uiDropdown-button">
-									    	<button class="uiDropdown-selected uiButtonStandard"><i class="uiIcon-gi-lock"></i> <span>Just Me</span></a> <i class="uiIcon-hl-chevron-down"></i></button>
+								<!--	<div id="postAudience" class="uiDropdown  uiDropdown-button">
+									    	<button class="uiDropdown-selected uiButtonStandard"><i class="uiIcon-gi-lock"></i> <span>Just Me</span> <i class="uiIcon-hl-chevron-down"></i></button>
 										<ul class="uiDropdown-menu" role="menu" aria-labelledby="dropdownMenu" style="margin-right: 20px">
 											<li><a data-value="0" tabindex="-1" href="#"><i class="uiIcon-gi-globe"></i> Public</a></li>
 											<li><a data-value="1" tabindex="-1" href="#"><i class="uiIcon-gi-lock"></i> Just Me</a></li>
 										</ul>
-									</div>
+									</div>-->
 								
 								<div class="uiButtonAppend ">
 									 <span class="input-append date" id="dp3" data-date="" data-date-format="mm-dd-yyyy" placeholder="01-01-2001">
@@ -51,85 +55,58 @@
 								                     	<span class="add-on" ></span>
 								                     </span>
 								                     <input class="span2" tabindex="3" maxlength="8" id="fbClock" name="fbClock" placeholder="12:34 AM" type="text" role="tooltip" data-placement="right" title="Right format hh:mm [AM/PM]">
-								                     <button id="postS" class="uiButtonDisabled" tabindex="4" disabled="disabled">Schedule Post</button><!--id="fbPost"-->
-								                     
+								                     <button id="postS" class="uiButtonDisabled" tabindex="4" disabled="disabled">Schedule Post</button>
 							               </div>
 						               </div>
 						</div>
 					</form>
-					<script type="text/javascript">
-						$(document).ready(function(){
-							if($('.statusValues').length == 0){
-								a = $('#nullList').html();
-								b = Handlebars.compile(a);
-								$('#scheduledPosts').append(b);
-							}
-							$('#save').submit(function(e){
-								$.ajax({
-									url: $(this).attr('action'),
-									type: $(this).attr('method'),
-									data: $(this).serialize()
-								});
-								callMe();
-								e.preventDefault();
-							});	
-						});
-
-						var callMe =  function(){
-							var a = {
-								a: $('[name="fbName"]').val(),
-								b: $('[name="fbID"]').val(),
-								c: $('[name="fbDate"]').val() + " " + $('[name="fbClock"]').val(),
-								d: $('[name="fbMsg"]').val(),
-								e: $('[name="fbMsgExpire"]').val()
-							},
-								b = $('#addAfterSched').html(),
-								c = Handlebars.compile(b),
-								d = c(a);
-								if($('#noQuery').length>0){$('#noQuery').remove();}
-								$('#savedPosts').append(d);
-								//$('[name="fbMsg"], [name="fbClock"]').val('');
-						};
-				               </script>
 				</div>
-				<script type="text/javascript">
-					$('#fbMsg').on('input propertychange keyup change',function(){PPInputs.textAreaAdjust(this);});
-					
-					$('#fbMsg, #fbClock').on('input propertychange keyup change',function(){
-						if($('#fbMsg').val().length > 0 && ($('#fbClock').val().length > 0 &&
-							PPInputs.checkClock($('#fbClock')) === true)){							
-							$('#postS').removeAttr('disabled')
-								.removeClass('uiButtonDisabled');							
-							return;
-						}
-							$('#postS').attr('disabled','disabled')
-								.addClass('uiButtonDisabled');
-					});
-
-				</script>
 				<div id="scheduledPosts">
 					<h4>Scheduled Posts</h4>
 					<div id="savedPosts" class="uiTable striped">
-						<div class="statusTitles uiTable-row">
-							<div class="span2">Name</div>
-							<div class="span2">User ID</div>
-							<div class="span2">Schedule</div>
-							<div class="span4">Content</div>
-							<div class="span2">Expires In</div>
-						</div>
-						{%for list in fetched %}
-						{% if list.postStatus == "Pending"%}
+						<div class="statusDate">Today</div>		
+						{% for list in fetched%}
+						{% if list.postStatus == "Pending" and list.userID == userID and list.postDatePrinted[:10] == dateNow%}
 						<div class="statusValues uiTable-row">
-							<div class="span2">{{ list.userFullName }}</div>
-							<div class="span2">{{ list.userID }}</div>
-							<div class="span2">{{ list.postDatePrinted }}</div>
-							<div class="span4">{{ list.content }}</div>
-							<div class="span2">{{ list.postExpires }}</div>
+							<div  >{{ list.content }}</div>
+							<div >
+								<span><i class="uiIcon-gi-clock"></i>{{ list.postDatePrinted[11:] }}<span>
+								<span class="pull-right">
+									<a href="/edit/{{list.key.id()}}/"><i class="uiIcon-gi-pencil"></i>EDIT</a>
+									<a class="delete-handler" href="#" data-href="/delete/{{list.key.id()}}/"><i class="uiIcon-gi-remove_2"></i>DELETE</a>
+									<a href="#"  role="tooltip" data-placement="left" title="This feature will be available soon"><i class="uiIcon-gi-share"></i>POST NOW</a>
+								</span>
+							</div>
+						</div>
+						{%endif%}
+						{%endfor%}
+						
+
+						{%for list in fetched %}
+						{% if list.postStatus == "Pending" and list.userID == userID and list.postDatePrinted[:10] != dateNow %}
+						<script type="text/javascript">
+							$(document).ready(function(){today('.statusDate-{{list.postDatePrinted[:11]}}','{{list.postDatePrinted[:11]}}' );});
+						</script>
+						<div class="statusDate-{{list.postDatePrinted[:11]}}">
+						</div>
+						<div class="statusValues uiTable-row">
+							<div  >{{ list.content }}</div>
+							<div >
+								<span><i class="uiIcon-gi-clock"></i>{{ list.postDatePrinted[11:] }}<span>
+								<span class="pull-right">
+									<a href="/edit/{{list.key.id()}}/"><i class="uiIcon-gi-pencil"></i>EDIT</a>
+									<a class="delete-handler" href="#" data-href="/delete/{{list.key.id()}}/"><i class="uiIcon-gi-remove_2"></i>DELETE</a>
+									<a href="#"  role="tooltip" data-placement="left" title="This feature will be available soon"><i class="uiIcon-gi-share"></i>POST NOW</a>
+								</span>
+							</div>
 						</div>
 						{% endif %}
 						{%endfor%}
 					</div>
 				</div>
+				<style type="text/css">
+
+				</style>
 			</div>
 		</div>
 		<div id="pageFooter" class="uiHeaderLight">
@@ -175,6 +152,77 @@
               		});
               		$('[role="tooltip"]').tooltip({'animation':false});
 	</script>
+	
+	<script type="text/javascript">
+		$(".delete-handler").graphModal({
+			type: 'prompt',
+			theme: 'light',
+			title: 'Delete Post?',
+			content: 'Deleting this post cannot be undone. Are you sure to delete this post?',
+			buttons: ['Absolutely Yes', 'No! I\'m afraid']
+		});
+		$('#fbMsg').on('input propertychange keyup change',function(){PPInputs.textAreaAdjust(this);});
+		
+		$('#fbMsg, #fbClock').on('input propertychange keyup change',function(){
+			if($('#fbMsg').val().length > 0 && ($('#fbClock').val().length > 0 &&
+				PPInputs.checkClock($('#fbClock')) === true)){							
+				$('#postS').removeAttr('disabled')
+					.removeClass('uiButtonDisabled');							
+				return;
+			}
+				$('#postS').attr('disabled','disabled')
+					.addClass('uiButtonDisabled');
+		});
+
+	</script>
+	<script type="text/javascript">
+		var today = function(a,b){
+			var x = moment(a).isSame('{{dateNow}}');
+			if(x){
+				$(a).html('Today');
+			}
+			if(!x){
+				var y = moment(b).format('dddd, MMMM DD, YYYY');
+				$(a).html(y);
+			}
+		};
+		var checkToday = function(a){
+			return moment(a).isSame('{{dateNow}}');
+		}
+	</script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			if($('.statusValues').length == 0){
+				a = $('#nullList').html();
+				b = Handlebars.compile(a);
+				$('#scheduledPosts').append(b);
+			}
+			$('#save').submit(function(e){
+				$.ajax({
+					url: $(this).attr('action'),
+					type: $(this).attr('method'),
+					data: $(this).serialize()
+				});
+				callMe();
+				e.preventDefault();
+			});	
+		});
+
+		var callMe =  function(){
+			var a = {
+				a: $('[name="fbName"]').val(),
+				b: $('[name="fbID"]').val(),
+				c: $('[name="fbDate"]').val() + " " + $('[name="fbClock"]').val(),
+				d: $('[name="fbMsg"]').val()
+			},
+				b = $('#addAfterSched').html(),
+				c = Handlebars.compile(b),
+				d = c(a);
+				if($('#noQuery').length>0){$('#noQuery').remove();}
+				$('#savedPosts').append(d);
+				//$('[name="fbMsg"], [name="fbClock"]').val('');
+		};
+               </script>
 	{%raw%}
 	<script type="text/x-handlebars-template" id="tempLogin">
 		{{#if a}}
@@ -186,11 +234,8 @@
 	</script>
 	<script type="text/x-handlebars-template" id="addAfterSched">
 		<div class="statusValues uiTable-row">
-			<div class="span2">{{a}}</div>
-			<div class="span2">{{b}}</div>
-			<div class="span2">{{c}}</div>
-			<div class="span4">{{d}}</div>
-			<div class="span2">{{e}}</div>
+			<div>{{d}}</div>
+			<div><i class="uiIcon-gi-clock"></i>{{c}}</div>
 		</div>
 
 	</script>
@@ -198,7 +243,7 @@
 		<div class="uiTable" id="noQuery">
 			<div class="statusValues uiTable-row">
 				<div class="statusNoContent">
-					<center>No schedules had been added. Fill up the form above to add one.</center>
+					<center><h4>No schedules had been added. Fill up the form above to add one.</h4></center>
 				</div>
 			</div>
 		</div>
