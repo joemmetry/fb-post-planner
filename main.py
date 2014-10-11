@@ -69,17 +69,35 @@ def facebookTokenConvert(a,self):
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
-        fetchContents = SPContents.query().order(SPContents.postDatePrinted).fetch()
+        getDate = datetime.now() + timedelta(hours=8) + timedelta(days=1)
+        fetchContents = SPContents.query(ndb.AND(
+                SPContents.postStatus == "Pending",
+                SPContents.postDate > getDate
+            )
+            ).order(SPContents.postDate).fetch()
+        fetchToday = SPContents.query(
+            ndb.AND(
+                SPContents.postStatus == "Pending",
+                ndb.AND(
+                    SPContents.postDate >= datetime.today(),
+                    SPContents.postDate <= getDate
+                    )
+                )
+            ).order(SPContents.postDate).fetch()
         getUser = self.request.cookies.get('socC')
         getID = self.request.cookies.get('socA')
-        getDate = datetime.now() + timedelta(hours=8)
-        values = {
-            'fetched': fetchContents,
-            'userID' : getID,
-            'dateNow' : datetime.strftime(getDate, "%m-%d-%Y")
-        }
-        page = JINJA_ENV.get_template('pages/index.html')
-        self.response.write(page.render(values))
+
+        if getUser == "Guest" or not getUser:
+            page = JINJA_ENV.get_template('pages/indexLoggedIn.html')
+            self.response.write(page.render())
+        else:
+            values = {
+                'fetchedPending': fetchContents,
+                'fetchedToday': fetchToday,
+                'userID' : getID
+            }
+            page = JINJA_ENV.get_template('pages/index.html')
+            self.response.write(page.render(values))
 
 class TosHandler(webapp2.RequestHandler):
     def get(self):
@@ -133,8 +151,10 @@ class PostScheduledHandler(webapp2.RequestHandler):
         a = SPContents()
         a.postDate = datetime.now()
         b = SPContents.query(
-                ndb.AND(SPContents.postDate <= datetime.now() + timedelta(hours=8),
-                    SPContents.postStatus=="Pending")
+            ndb.AND(
+                SPContents.postDate <= datetime.now()+timedelta(hours=8),
+                SPContents.postStatus=="Pending"
+                )
             ).fetch()
         for c in b:
             data = contentFetchFromApp(c)
@@ -163,6 +183,7 @@ class EditHandler(webapp2.RequestHandler):
 
         getPosts.content = self.request.get('fbMsg')
         getPosts.postDate = datetime.strptime(formatDate, "%m-%d-%Y %I:%M %p")
+        getPosts.postDatePrinted = formatDate
         getPosts.put()
         time.sleep(3)
         self.redirect('/')
@@ -172,6 +193,17 @@ class DeleteHandler(webapp2.RequestHandler):
         getID = int(postid)
         ndb.Key(SPContents, getID).delete()
         time.sleep(2)
+        self.redirect('/')
+
+class PostHandler(webapp2.RequestHandler):
+    def get(self,postid):
+        getID = int(postid)
+        a = ndb.Key(SPContents, getID).get()
+        b = contentFetchFromApp(a)
+        contentPostToFacebook(b, a.userID)
+        a.postStatus = "Completed"
+        a.put()
+        time.sleep(1)
         self.redirect('/')
         
 #Field Fetchers
@@ -197,5 +229,6 @@ app = webapp2.WSGIApplication([
     ('/bootposts',PostScheduledHandler),
     ('/bootupdatetoken', UpdateTokenHandler),
     ('/edit/(\d+)/', EditHandler),
-    ('/delete/(\d+)/', DeleteHandler)
+    ('/delete/(\d+)/', DeleteHandler),
+    ('/post/(\d+)/',PostHandler)
 ], debug=True)

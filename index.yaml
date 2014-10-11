@@ -12,5 +12,16 @@ indexes:
 
 - kind: SPContents
   properties:
+  - name: postDate
+  - name: postStatus
+  - name: postDatePrinted
+
+- kind: SPContents
+  properties:
   - name: postStatus
   - name: postDate
+
+- kind: SPContents
+  properties:
+  - name: postStatus
+  - name: postDatePrinted

@@ -31,14 +31,10 @@
 						<input type="hidden" name="fbMsgExpire" value="" />
 						<textarea id="fbMsg" tabindex="1" name="fbMsg" placeholder="What are you thinking right now?"></textarea>
 						<div id="fbMsgOpts">
-							<a href="#" id=""  role="tooltip" data-placement="right" title="This feature will be available soon"
- role="tooltip" data-placement="right" title="This feature will be available soon"><i class="uiIcon-gi-user_add"></i></a>
-							<a href="#" id=""  role="tooltip" data-placement="right" title="This feature will be available soon"
- role="tooltip" data-placement="right" title="This feature will be available soon"><i class="uiIcon-gi-pin"></i></a>
-							<a href="#" id=""  role="tooltip" data-placement="right" title="This feature will be available soon"
- role="tooltip" data-placement="right" title="This feature will be available soon"><i class="uiIcon-gi-camera"></i></a>
-							<a href="#" id=""  role="tooltip" data-placement="right" title="This feature will be available soon"
- role="tooltip" data-placement="right" title="This feature will be available soon"><i class="uiIcon-gi-heart"></i></a>
+							<a href="#" id=""  role="tooltip" data-placement="right" title="This feature will be available soon" role="tooltip" data-placement="right" title="This feature will be available soon"><i class="uiIcon-gi-user_add"></i></a>
+							<a href="#" id=""  role="tooltip" data-placement="right" title="This feature will be available soon"  role="tooltip" data-placement="right" title="This feature will be available soon"><i class="uiIcon-gi-pin"></i></a>
+							<a href="#" id=""  role="tooltip" data-placement="right" title="This feature will be available soon"  role="tooltip" data-placement="right" title="This feature will be available soon"><i class="uiIcon-gi-camera"></i></a>
+							<a href="#" id=""  role="tooltip" data-placement="right" title="This feature will be available soon"  role="tooltip" data-placement="right" title="This feature will be available soon"><i class="uiIcon-gi-heart"></i></a>
 							<div class="pull-right">
 								
 								<!--	<div id="postAudience" class="uiDropdown  uiDropdown-button">
@@ -64,17 +60,19 @@
 				<div id="scheduledPosts">
 					<h4>Scheduled Posts</h4>
 					<div id="savedPosts" class="uiTable striped">
+						{% for list in fetchedToday%}
+						{% if loop.index == 1%}
 						<div class="statusDate">Today</div>		
-						{% for list in fetched%}
-						{% if list.postStatus == "Pending" and list.userID == userID and list.postDatePrinted[:10] == dateNow%}
+						{%endif%}
+						{% if list.userID == userID %}
 						<div class="statusValues uiTable-row">
 							<div  >{{ list.content }}</div>
 							<div >
 								<span><i class="uiIcon-gi-clock"></i>{{ list.postDatePrinted[11:] }}<span>
 								<span class="pull-right">
-									<a href="/edit/{{list.key.id()}}/"><i class="uiIcon-gi-pencil"></i>EDIT</a>
+									<a class="edit-handler" href="#" data-href="/edit/{{list.key.id()}}/" data-title="Edit Post"><i class="uiIcon-gi-pencil"></i>EDIT</a>
 									<a class="delete-handler" href="#" data-href="/delete/{{list.key.id()}}/"><i class="uiIcon-gi-remove_2"></i>DELETE</a>
-									<a href="#"  role="tooltip" data-placement="left" title="This feature will be available soon"><i class="uiIcon-gi-share"></i>POST NOW</a>
+									<a class="post-hanlder" href="#" data-href="/post/{{list.key.id()}}/"><i class="uiIcon-gi-share"></i>POST NOW</a>
 								</span>
 							</div>
 						</div>
@@ -82,8 +80,8 @@
 						{%endfor%}
 						
 
-						{%for list in fetched %}
-						{% if list.postStatus == "Pending" and list.userID == userID and list.postDatePrinted[:10] != dateNow %}
+						{%for list in fetchedPending %}
+						{% if list.userID == userID %}
 						<script type="text/javascript">
 							$(document).ready(function(){today('.statusDate-{{list.postDatePrinted[:11]}}','{{list.postDatePrinted[:11]}}' );});
 						</script>
@@ -94,9 +92,9 @@
 							<div >
 								<span><i class="uiIcon-gi-clock"></i>{{ list.postDatePrinted[11:] }}<span>
 								<span class="pull-right">
-									<a href="/edit/{{list.key.id()}}/"><i class="uiIcon-gi-pencil"></i>EDIT</a>
+									<a class="edit-handler" href="#" data-href="/edit/{{list.key.id()}}/" data-title="Edit Post"><i class="uiIcon-gi-pencil"></i>EDIT</a>
 									<a class="delete-handler" href="#" data-href="/delete/{{list.key.id()}}/"><i class="uiIcon-gi-remove_2"></i>DELETE</a>
-									<a href="#"  role="tooltip" data-placement="left" title="This feature will be available soon"><i class="uiIcon-gi-share"></i>POST NOW</a>
+									<a class="post-hanlder" href="#" data-href="/post/{{list.key.id()}}/"><i class="uiIcon-gi-share"></i>POST NOW</a>
 								</span>
 							</div>
 						</div>
@@ -112,7 +110,7 @@
 		<div id="pageFooter" class="uiHeaderLight">
 			<span>
 				<div class="containerMain">
-					Social Post Planner <span style="color:#0645ad;font-weight:bolder;font-size:14px;">&#9426;</span> 2014. Patents Pending.
+					Social Post Planner <span style="color:#0645ad;font-weight:bolder;font-size:14px;" >&#9426;</span> 2014. Patents Pending.
 					<span class="pull-right"><a href="/terms">Terms of Use</a> | <a href="/privacy">Privacy</a> | <a href="/about">About</a></span>
 				</div>
 			</span>
@@ -161,8 +159,15 @@
 			content: 'Deleting this post cannot be undone. Are you sure to delete this post?',
 			buttons: ['Absolutely Yes', 'No! I\'m afraid']
 		});
+		$(".post-handler").graphModal({
+			type: 'prompt',
+			theme: 'light',
+			title: 'Post to Social Media',
+			content: 'Do you want to post this content?',
+			buttons: ['Yes! I\'m excited!', 'No! Not yet']
+		});
+		$('.edit-handler').graphModal({theme: 'light', width:1030, type: 'external', keyboard: true});
 		$('#fbMsg').on('input propertychange keyup change',function(){PPInputs.textAreaAdjust(this);});
-		
 		$('#fbMsg, #fbClock').on('input propertychange keyup change',function(){
 			if($('#fbMsg').val().length > 0 && ($('#fbClock').val().length > 0 &&
 				PPInputs.checkClock($('#fbClock')) === true)){							
@@ -173,7 +178,6 @@
 				$('#postS').attr('disabled','disabled')
 					.addClass('uiButtonDisabled');
 		});
-
 	</script>
 	<script type="text/javascript">
 		var today = function(a,b){
@@ -211,8 +215,8 @@
 		var callMe =  function(){
 			var a = {
 				a: $('[name="fbName"]').val(),
-				b: $('[name="fbID"]').val(),
-				c: $('[name="fbDate"]').val() + " " + $('[name="fbClock"]').val(),
+				b: $('[name="fbClock"]').val(),
+				c: moment($('[name="fbDate"]').val() + " " + $('[name="fbClock"]').val()).format('dddd, MMMM DD, YYYY'),
 				d: $('[name="fbMsg"]').val()
 			},
 				b = $('#addAfterSched').html(),
@@ -220,6 +224,7 @@
 				d = c(a);
 				if($('#noQuery').length>0){$('#noQuery').remove();}
 				$('#savedPosts').append(d);
+				$('.statusValues:last-child').hide().fadeIn(200);
 				//$('[name="fbMsg"], [name="fbClock"]').val('');
 		};
                </script>
@@ -233,9 +238,15 @@
 		<a href="#" class="fb-login">{{d}}</a>
 	</script>
 	<script type="text/x-handlebars-template" id="addAfterSched">
+		<div class="statusDate">{{c}}</div>
 		<div class="statusValues uiTable-row">
 			<div>{{d}}</div>
-			<div><i class="uiIcon-gi-clock"></i>{{c}}</div>
+			<div>
+				<span><i class="uiIcon-gi-clock"></i>{{b}}</span>
+				<span class="pull-right">
+					Post options will be available later.
+				</span>
+			</div>
 		</div>
 
 	</script>
@@ -243,12 +254,12 @@
 		<div class="uiTable" id="noQuery">
 			<div class="statusValues uiTable-row">
 				<div class="statusNoContent">
-					<center><h4>No schedules had been added. Fill up the form above to add one.</h4></center>
+					<h1>:(</h1>
+					<span>No schedules had been added. Fill up the form above to add one.</span>
 				</div>
 			</div>
 		</div>
 	</script>
 	{%endraw%}
-
 </body>
 </html>

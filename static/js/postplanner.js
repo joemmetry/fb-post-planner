@@ -217,7 +217,7 @@ var implementFunctions = function () {
             }
             $('[name="fbAudience"]').val(a);
         });
-        $(document).on('click', '.fb-login', function (e) {
+        $(document).on('click', '.fb-login, .fb-initlogin', function (e) {
             e.preventDefault();
             FB.getLoginStatus(function (a) {
 
